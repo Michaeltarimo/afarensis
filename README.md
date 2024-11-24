@@ -74,6 +74,8 @@ Afarensis is a cutting-edge GPU marketplace platform that democratizes access to
 
 ## Technical Architecture
 
+### Monorepo Structure
+
 ## Features
 
 🚀 **Instant Access**
@@ -100,3 +102,5 @@ Afarensis is a cutting-edge GPU marketplace platform that democratizes access to
 - Regular security audits
 
 ## Quick Start
+
+## Project Structure

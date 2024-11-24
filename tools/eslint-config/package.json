@@ -1,0 +1,12 @@
+{
+  "name": "@afarensis/eslint-config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "eslint-config-next": "^13.4.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "7.32.2",
+    "eslint-config-turbo": "^1.9.3"
+  }
+} 
