@@ -1,4 +1,13 @@
-# Afarensis - Enterprise GPU Marketplace Platform
+# Afarensis
+
+A GPU marketplace platform that provide accessible, scalable GPU computing resources to businesses and individuals. The platform facilitates the democratization of GPU computing by creating a seamless marketplace for GPU resource allocation and management, with specific focus on:
+
+- **AWS GPU Resources**: EC2 GPU instances (P4, P3, G5, G4dn) with Compute Optimizer integration
+- **Google Cloud Resources**: GPU types (A2, N1, T4) with Vertex AI capabilities
+- **Resource Management**: Real-time tracking, dynamic allocation, and optimization
+- **Marketplace Features**: Price comparison, instant deployment, and usage monitoring
+
+Built with Next.js 14, TailwindCSS, and modern cloud infrastructure for optimal performance and scalability.
 
 <p align="center">
   <img src="docs/assets/afarensis-logo.png" alt="Afarensis Logo" width="200"/>
