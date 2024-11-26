@@ -165,7 +165,7 @@ const SignInPage = () => {
                 Forgot password?
               </Link>
               <div className="mt-1.5 text-text-secondary dark:text-text-dark-secondary text-xs">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link 
                   href="/sign-up"
                   className="text-lime-400 hover:text-lime-300 transition-colors"
