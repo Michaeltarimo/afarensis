@@ -1,9 +1,15 @@
-import React from 'react'
+"use client";
+import HeroSection from '@/components/home/HeroSection';
+import FeaturesGrid from '@/components/home/FeaturesGrid';
 
-const page = () => {
+const HomePage = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div className="flex flex-col">
+      <HeroSection />
+      <FeaturesGrid />
+      {/* Add other sections as we build them */}
+    </div>
+  );
+};
 
-export default page
+export default HomePage;

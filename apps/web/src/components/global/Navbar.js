@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import SearchModal from '../search/SearchModal';
 import { Search, Menu, X } from 'lucide-react';
+import AvailabilityRibbon from './AvailabilityRibbon';
 
 const AnimatedLogo = () => {
   const [isCompact, setIsCompact] = useState(false);
@@ -108,8 +109,9 @@ const Navbar = () => {
   };
 
   return (
-    <>
-      <nav className="fixed top-0 w-full bg-background-elevated-light dark:bg-background-elevated-dark border-b border-gray-200 dark:border-gray-800 z-50">
+    <div>
+      <AvailabilityRibbon />
+      <nav className="fixed top-8 w-full bg-background-elevated-light dark:bg-background-elevated-dark border-b border-gray-200 dark:border-gray-800 z-40">
         <div className=" mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Updated Logo */}
@@ -289,7 +291,7 @@ const Navbar = () => {
         isOpen={isSearchOpen}
         closeModal={() => setIsSearchOpen(false)}
       />
-    </>
+    </div>
   );
 };
 
