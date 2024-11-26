@@ -22,6 +22,10 @@
   --color-text-dark-secondary: #D1D5DB;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @layer base {
   body {
     @apply bg-background-light dark:bg-background-dark text-text-primary dark:text-text-dark-primary;

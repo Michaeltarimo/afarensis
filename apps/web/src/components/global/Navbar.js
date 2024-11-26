@@ -1,8 +1,8 @@
 "use client";
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SearchModal from '../search/SearchModal';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import AvailabilityRibbon from './AvailabilityRibbon';
 
 const AnimatedLogo = () => {
@@ -44,7 +44,8 @@ const AnimatedLogo = () => {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [closedDropdowns, setClosedDropdowns] = useState(new Set());
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const moreDropdownRef = useRef(null);
 
   // Handle keyboard shortcut
   useEffect(() => {
@@ -59,112 +60,132 @@ const Navbar = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const navItems = [
+  // Handle click outside for More dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moreDropdownRef.current && !moreDropdownRef.current.contains(event.target)) {
+        setIsMoreOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80; // Account for navbar height
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const mainNavItems = [
     { 
-      title: 'Marketplace', 
-      href: '/marketplace',
-      tooltip: 'Browse GPU Resources' 
+      title: 'Compute',
+      onClick: () => scrollToSection('compute-section')
     },
     { 
-      title: 'Solutions', 
-      href: '#',
-      tooltip: 'Explore Solutions',
-      dropdown: [
-        { title: 'AI Training', href: '/solutions/ai-training' },
-        { title: 'Machine Learning', href: '/solutions/machine-learning' },
-        { title: 'Rendering', href: '/solutions/rendering' },
-        { title: 'Scientific Computing', href: '/solutions/scientific-computing' },
-        { title: 'Cryptocurrency Mining', href: '/solutions/crypto-mining' },
-      ]
+      title: 'Intelligence',
+      onClick: () => scrollToSection('intelligence-section')
     },
     { 
-      title: 'Documentation', 
-      href: '/docs',
-      tooltip: 'Read Documentation'
-    },
-    { 
-      title: 'Company', 
-      href: '#',
-      tooltip: 'About Our Company',
-      dropdown: [
-        { title: 'About Us', href: '/about' },
-        { title: 'Blog', href: '/blog' },
-        { title: 'Careers', href: '/careers' },
-        { title: 'Contact', href: '/contact' },
-        { title: 'Press Kit', href: '/press' },
-      ]
-    },
+      title: 'Research',
+      onClick: () => scrollToSection('research-section')
+    }
   ];
 
-  const toggleDropdown = (title) => {
-    setClosedDropdowns(prev => {
-      const newClosed = new Set(prev);
-      if (newClosed.has(title)) {
-        newClosed.delete(title);
-      } else {
-        newClosed.add(title);
-      }
-      return newClosed;
-    });
+  const moreDropdownItems = {
+    column1: [
+      { title: 'Documentation', href: '/docs' },
+      { title: 'API Reference', href: '/api' },
+      { title: 'Pricing', href: '/pricing' },
+      { title: 'Status', href: '/status' },
+    ],
+    column2: [
+      { title: 'Blog', href: '/blog' },
+      { title: 'About Us', href: '/about' },
+      { title: 'Careers', href: '/careers' },
+      { title: 'Contact', href: '/contact' },
+    ]
   };
 
   return (
     <div>
       <AvailabilityRibbon />
       <nav className="fixed top-8 w-full bg-background-elevated-light dark:bg-background-elevated-dark border-b border-gray-200 dark:border-gray-800 z-40">
-        <div className=" mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Updated Logo */}
+            {/* Logo */}
             <div className="flex-shrink-0">
               <AnimatedLogo />
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <div key={item.title} className="relative group">
-                  <Link 
-                    href={item.href}
-                    className="flex flex-col items-center group relative"
-                  >
-                    <div className="flex items-center space-x-1 p-2 rounded-lg transition-all duration-300 group-hover:-translate-y-1">
-                      <span className="text-text-primary dark:text-text-dark-primary group-hover:text-lime-400 transition-colors">
-                        {item.title}
-                        {item.dropdown && <span className="ml-1">▾</span>}
-                      </span>
-                    </div>
-                    
-                    {/* Tooltip - Only show for items without dropdown */}
-                    {!item.dropdown && (
-                      <div className="absolute -bottom-12 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-50">
-                        {item.tooltip}
-                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-                      </div>
-                    )}
-                  </Link>
+              {/* Main Nav Items */}
+              {mainNavItems.map((item) => (
+                <button
+                  key={item.title}
+                  onClick={item.onClick}
+                  className="text-text-primary dark:text-text-dark-primary hover:text-lime-400 transition-colors"
+                >
+                  {item.title}
+                </button>
+              ))}
 
-                  {/* Dropdown Menu */}
-                  {item.dropdown && (
-                    <div className="absolute left-0 mt-2 w-48 rounded-lg shadow-lg bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-40">
-                      <div className="py-1 rounded-lg overflow-hidden">
-                        {item.dropdown.map((dropdownItem) => (
+              {/* More Dropdown */}
+              <div className="relative" ref={moreDropdownRef}>
+                <button
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  className="flex items-center space-x-1 text-text-primary dark:text-text-dark-primary hover:text-lime-400 transition-colors"
+                >
+                  <span>More</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {isMoreOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-[480px] bg-background-elevated-light dark:bg-background-elevated-dark rounded-lg border border-gray-200 dark:border-gray-800 shadow-lg">
+                    <div className="p-4 grid grid-cols-2 gap-4">
+                      {/* Column 1 */}
+                      <div>
+                        {moreDropdownItems.column1.map((item) => (
                           <Link
-                            key={dropdownItem.title}
-                            href={dropdownItem.href}
-                            className="block px-4 py-2 text-sm text-text-primary dark:text-text-dark-primary hover:bg-lime-50 dark:hover:bg-lime-900/20 transition-colors"
+                            key={item.title}
+                            href={item.href}
+                            className="block px-4 py-2 rounded-lg hover:bg-lime-400/10 text-text-primary dark:text-text-dark-primary hover:text-lime-400 transition-colors"
                           >
-                            {dropdownItem.title}
+                            {item.title}
+                          </Link>
+                        ))}
+                      </div>
+                      {/* Column 2 */}
+                      <div>
+                        {moreDropdownItems.column2.map((item) => (
+                          <Link
+                            key={item.title}
+                            href={item.href}
+                            className="block px-4 py-2 rounded-lg hover:bg-lime-400/10 text-text-primary dark:text-text-dark-primary hover:text-lime-400 transition-colors"
+                          >
+                            {item.title}
                           </Link>
                         ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                  </div>
+                )}
+              </div>
 
-            {/* Right Side Items */}
-            <div className="hidden lg:flex items-center space-x-6">
+              {/* Search Button */}
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="relative group"
@@ -179,109 +200,109 @@ const Navbar = () => {
                 </div>
               </button>
 
-              {/* Auth Button */}
-              <button className="auth-button-animate relative overflow-hidden px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ease-out">
+              {/* Auth Button - Updated with Link */}
+              <Link 
+                href="/sign-up"
+                className="auth-button-animate relative overflow-hidden px-6 py-2 rounded-lg text-sm font-medium"
+              >
                 <span className="relative z-10 text-white">Sign Up</span>
-              </button>
+              </Link>
             </div>
 
-            {/* Mobile menu button - Updated with Lucide icon */}
+            {/* Mobile menu button */}
             <div className="lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-lg text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
-                aria-expanded={isOpen}
               >
                 <span className="sr-only">Open main menu</span>
                 {isOpen ? (
-                  <X className="h-6 w-6 transition-transform duration-300 ease-in-out" />
+                  <X className="h-6 w-6" />
                 ) : (
-                  <Menu className="h-6 w-6 transition-transform duration-300 ease-in-out" />
+                  <Menu className="h-6 w-6" />
                 )}
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Mobile Navigation */}
-          <div
-            className={`lg:hidden absolute left-0 right-0 bg-background-elevated-light dark:bg-background-elevated-dark border-b border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out transform ${
-              isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'
-            }`}
-          >
-            <div className="px-4 py-3 space-y-1">
-              {navItems.map((item) => (
-                <div key={item.title} className="group">
-                  {!item.dropdown ? (
-                    <Link
-                      href={item.href}
-                      className="block px-4 py-2.5 rounded-lg text-text-primary dark:text-text-dark-primary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
-                    >
-                      {item.title}
-                    </Link>
-                  ) : (
-                    <div className="space-y-1">
-                      <button
-                        onClick={() => toggleDropdown(item.title)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg text-text-primary dark:text-text-dark-primary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
-                      >
-                        <span>{item.title}</span>
-                        <svg
-                          className={`w-4 h-4 transition-transform duration-300 ${
-                            closedDropdowns.has(item.title) ? '' : 'rotate-180'
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      {/* Dropdown content with animation */}
-                      <div
-                        className={`pl-4 ml-4 space-y-1 border-l-2 border-lime-400/20 overflow-hidden transition-all duration-300 ${
-                          closedDropdowns.has(item.title)
-                            ? 'max-h-0 opacity-0'
-                            : 'max-h-96 opacity-100'
-                        }`}
-                      >
-                        {item.dropdown.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.title}
-                            href={dropdownItem.href}
-                            className="block px-4 py-2 rounded-lg text-sm text-text-secondary dark:text-text-dark-secondary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
-                          >
-                            {dropdownItem.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {/* Mobile Search Button */}
+        {/* Mobile Navigation Menu */}
+        <div
+          className={`lg:hidden absolute left-0 right-0 bg-background-elevated-light dark:bg-background-elevated-dark border-b border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out transform ${
+            isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className="px-4 py-3 space-y-1">
+            {/* Main Navigation Items */}
+            {mainNavItems.map((item) => (
               <button
+                key={item.title}
                 onClick={() => {
-                  setIsSearchOpen(true);
+                  item.onClick();
                   setIsOpen(false);
                 }}
-                className="w-full flex items-center px-4 py-2.5 rounded-lg text-text-secondary dark:text-text-dark-secondary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300 mt-2"
+                className="w-full flex items-center px-4 py-3 rounded-lg text-text-primary dark:text-text-dark-primary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
               >
-                <Search className="h-4 w-4 mr-2" />
-                <span>Search GPU/Instance...</span>
+                {item.title}
+              </button>
+            ))}
+
+            {/* More Dropdown in Mobile */}
+            <div className="relative">
+              <button
+                onClick={() => setIsMoreOpen(!isMoreOpen)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-text-primary dark:text-text-dark-primary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
+              >
+                <span>More</span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform duration-300 ${
+                    isMoreOpen ? 'rotate-180' : ''
+                  }`} 
+                />
               </button>
 
-              {/* Mobile Auth Button */}
-              <div className="px-4 pt-2 pb-3">
-                <button className="w-full auth-button-animate relative overflow-hidden px-6 py-2.5 rounded-lg text-sm font-medium">
-                  <span className="relative z-10 text-white">Sign Up</span>
-                </button>
+              {/* Collapsible More Content */}
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  isMoreOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+                }`}
+              >
+                {[...moreDropdownItems.column1, ...moreDropdownItems.column2].map((item) => (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    onClick={() => {
+                      setIsMoreOpen(false);
+                      setIsOpen(false);
+                    }}
+                    className="block px-4 py-2.5 text-sm text-text-secondary dark:text-text-dark-secondary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
+                  >
+                    {item.title}
+                  </Link>
+                ))}
               </div>
+            </div>
+
+            {/* Mobile Search Button */}
+            <button
+              onClick={() => {
+                setIsSearchOpen(true);
+                setIsOpen(false);
+              }}
+              className="w-full flex items-center px-4 py-3 rounded-lg text-text-secondary dark:text-text-dark-secondary hover:text-lime-400 hover:bg-lime-400/10 transition-all duration-300"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              <span>Search GPU/Instance...</span>
+            </button>
+
+            {/* Mobile Auth Button - Updated with Link */}
+            <div className="px-4 pt-2 pb-3">
+              <Link 
+                href="/sign-up"
+                className="block w-full auth-button-animate relative overflow-hidden px-6 py-3 rounded-lg text-sm font-medium text-center"
+              >
+                <span className="relative z-10 text-white">Sign Up</span>
+              </Link>
             </div>
           </div>
         </div>
