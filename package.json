@@ -17,5 +17,8 @@
     "turbo": "^1.10.14",
     "typescript": "^5.2.2"
   },
-  "packageManager": "pnpm@8.6.10"
-} 
+  "packageManager": "pnpm@8.6.10",
+  "dependencies": {
+    "lucide-react": "^0.461.0"
+  }
+}

@@ -3,19 +3,143 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary Colors */
+  --color-primary: #65a30d;
+  --color-secondary: #a3e635;
+  --color-accent: #F97316;
+
+  /* Background Colors */
+  --color-background-light: #FFFFFF;
+  --color-background-dark: #262626;
+  --color-background-elevated-light: #F8FAFC;
+  --color-background-elevated-dark: #404040;
+
+  /* Text Colors */
+  --color-text-primary: #171717;
+  --color-text-secondary: #404040;
+  --color-text-muted: #737373;
+  --color-text-dark-primary: #F3F4F6;
+  --color-text-dark-secondary: #D1D5DB;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-background-light dark:bg-background-dark text-text-primary dark:text-text-dark-primary;
+    font-family: var(--font-dm-sans);
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl font-bold text-text-primary dark:text-text-dark-primary;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold text-text-primary dark:text-text-dark-primary;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold text-text-primary dark:text-text-dark-primary;
+  }
+
+  p {
+    @apply text-base text-text-secondary dark:text-text-dark-secondary;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply bg-primary dark:bg-primary-light text-white px-4 py-2 rounded-lg hover:bg-primary-dark dark:hover:bg-primary transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-primary dark:text-primary-light border border-primary dark:border-primary-light px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary-light/10 transition-colors;
+  }
 }
+
+/* Animation Classes */
+.fade-in {
+  @apply transition-opacity duration-300 ease-in-out;
+}
+
+.hover-scale {
+  @apply transition-transform duration-200 hover:scale-105;
+}
+
+@layer utilities {
+  .hover-rise {
+    @apply transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/20;
+  }
+
+  .scale-on-hover {
+    @apply transition-transform duration-300 hover:scale-110;
+  }
+
+  .fade-in-up {
+    @apply transition-all duration-300 opacity-0 translate-y-2;
+  }
+
+  .fade-in-up.show {
+    @apply opacity-100 translate-y-0;
+  }
+}
+
+.auth-button-animate {
+  background: linear-gradient(
+    110deg,
+    #65a30d 0%,
+    #a3e635 50%,
+    #65a30d 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+  box-shadow: 0 0 20px rgba(163, 230, 53, 0.2);
+  transform-origin: center;
+}
+
+.auth-button-animate:hover {
+  animation: shimmer 2s infinite;
+  box-shadow: 0 0 30px rgba(163, 230, 53, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.auth-button-animate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.auth-button-animate:hover::before {
+  transform: translateX(100%);
+}
+

@@ -191,16 +191,16 @@
 ## Design System
 
 1. **Color Palette**
-   - Primary: #3B82F6 (Blue)
-   - Secondary: #10B981 (Green)
-   - Accent: #8B5CF6 (Purple)
+   - Primary: #374151 (Neutral-700)
+   - Secondary: #F43F5E (Rose-500)
+   - Accent: #F97316 (Orange-500)
    - Background: 
      * Light: #FFFFFF
      * Dark: #111827
    - Text:
-     * Primary: #1F2937
-     * Secondary: #4B5563
-     * Muted: #9CA3AF
+     * Primary: #374151 (Neutral-700)
+     * Secondary: #6B7280 (Neutral-500)
+     * Muted: #9CA3AF (Neutral-400)
 
 2. **Typography**
    - Headings: Inter
@@ -236,7 +236,37 @@
    - Micro-interactions
 
 5. **Responsive Breakpoints**
-   - Mobile: 320px
-   - Tablet: 768px
-   - Desktop: 1024px
-   - Large Desktop: 1280px 
+   - Extra Small (xs): 320px
+     * Small phones
+     * Minimal layouts
+     * Single column designs
+   
+   - Small (sm): 375px
+     * Large phones
+     * Compact layouts
+     * Enhanced mobile views
+   
+   - Medium (md): 768px
+     * Tablets
+     * Two column layouts
+     * Navigation changes
+   
+   - Large (lg): 1024px
+     * Laptops/Small Desktops
+     * Multi-column layouts
+     * Full navigation
+   
+   - Extra Large (xl): 1280px
+     * Large Laptops
+     * Expanded layouts
+     * Additional content areas
+   
+   - 2XL: 1536px
+     * Large Desktops
+     * Maximized layouts
+     * Full feature display
+   
+   - 3XL: 1920px
+     * Ultra Wide Displays
+     * Optimized for large screens
+     * Maximum content display
