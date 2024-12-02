@@ -6,14 +6,18 @@ import Footer from "@/components/global/Footer";
 export default function RootLayoutContent({ children }) {
   const pathname = usePathname();
   const isAuthPage = pathname?.includes('/sign-');
+  const isDashboardPage = pathname?.startsWith('/dashboard') || pathname?.includes('/(pages)');
+
+  // Don't show navbar and footer for auth pages and dashboard pages
+  const shouldShowNavFooter = !isAuthPage && !isDashboardPage;
 
   return (
     <body className="font-sans antialiased min-h-screen flex flex-col">
-      {!isAuthPage && <Navbar />}
-      <main className={`flex-grow ${!isAuthPage ? 'pt-16' : ''}`}>
+      {shouldShowNavFooter && <Navbar />}
+      <main className={`flex-grow ${shouldShowNavFooter ? 'pt-16' : ''}`}>
         {children}
       </main>
-      {!isAuthPage && <Footer />}
+      {shouldShowNavFooter && <Footer />}
     </body>
   );
 } 

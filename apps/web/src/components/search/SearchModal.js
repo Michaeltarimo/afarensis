@@ -3,6 +3,25 @@ import { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Search, X, Clock, Cpu, Sparkles, Filter, Send, Bot, User, ArrowRight } from 'lucide-react';
 
+// Move mockSearchResults outside the component
+const mockSearchResults = [
+  {
+    title: 'NVIDIA A100 GPU Instance',
+    provider: 'AWS',
+    price: '$0.85/hr',
+    specs: '80GB Memory, PCIe 4.0',
+    availability: 'Available Now'
+  },
+  {
+    title: 'Tesla V100 Instance',
+    provider: 'GCP',
+    price: '$0.74/hr',
+    specs: '32GB Memory, NVLink',
+    availability: 'Available Now'
+  },
+  // Add more mock results...
+];
+
 const SearchModal = ({ isOpen, closeModal }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -16,24 +35,6 @@ const SearchModal = ({ isOpen, closeModal }) => {
     'AWS P4d instances',
     'Multi-GPU setup',
     'RTX 4090 instances'
-  ];
-
-  const mockSearchResults = [
-    {
-      title: 'NVIDIA A100 GPU Instance',
-      provider: 'AWS',
-      price: '$0.85/hr',
-      specs: '80GB Memory, PCIe 4.0',
-      availability: 'Available Now'
-    },
-    {
-      title: 'Tesla V100 Instance',
-      provider: 'GCP',
-      price: '$0.74/hr',
-      specs: '32GB Memory, NVLink',
-      availability: 'Available Now'
-    },
-    // Add more mock results...
   ];
 
   const suggestedFilters = [

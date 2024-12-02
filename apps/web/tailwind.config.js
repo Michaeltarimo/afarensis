@@ -34,16 +34,16 @@ module.exports = {
         },
         background: {
           light: '#FFFFFF',     // white
-          dark: '#262626',      // neutral-800
+          dark: '#000000',      // pure black
           'elevated-light': '#F8FAFC', // slate-50
-          'elevated-dark': '#404040',  // neutral-700
+          'elevated-dark': '#0A0A0A',  // almost black
         },
         text: {
           primary: '#171717',   // neutral-900 (light mode)
           secondary: '#404040', // neutral-700 (light mode)
           muted: '#737373',     // neutral-500
-          'dark-primary': '#F3F4F6',   // gray-100 (dark mode)
-          'dark-secondary': '#D1D5DB', // gray-300 (dark mode)
+          'dark-primary': '#FFFFFF',   // pure white (dark mode)
+          'dark-secondary': '#E5E5E5', // slightly off-white (dark mode)
         },
       },
       fontFamily: {
@@ -56,6 +56,15 @@ module.exports = {
       backgroundSize: {
         'dot': '24px 24px',
       },
+      keyframes: {
+        'pulse-subtle': {
+          '0%, 100%': { opacity: 0.1 },
+          '50%': { opacity: 0.2 }
+        }
+      },
+      animation: {
+        'pulse-subtle': 'pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+      }
     },
   },
   plugins: [],
